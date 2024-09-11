@@ -5,38 +5,39 @@ import 'package:workout_tracker/core/constants.dart';
 
 void main() {
   testWidgets('RepsSelector displays reps and triggers callback', (WidgetTester tester) async {
-    // Arrange
-    int selectedReps = 10;
-    int? changedReps;
+    int selectedReps = 5;
+    int? newReps;
 
-    // Act
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
           body: RepsSelector(
             selectedReps: selectedReps,
             onRepsChanged: (reps) {
-              changedReps = reps;
+              newReps = reps;
             },
           ),
         ),
       ),
     );
 
-    // Verify DropdownButton is shown with correct items
-    expect(find.byType(DropdownButton<int>), findsOneWidget);
-    for (int i = 1; i <= 20; i++) {
-      expect(find.text('$i reps'), findsOneWidget);
-    }
+    // Verify the dropdown contains the initial selected reps
+    expect(find.text('5 reps'), findsOneWidget);
 
-    // Tap the dropdown and select a new value
+    // Open the dropdown
     await tester.tap(find.byType(DropdownButton<int>));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('15 reps').last);
+    // Verify dropdown items
+    for (int reps in repetitions) {
+      expect(find.text('$reps reps'), findsOneWidget);
+    }
+
+    // Select new reps
+    await tester.tap(find.text('10 reps').last);
     await tester.pumpAndSettle();
 
-    // Verify callback is triggered with the new value
-    expect(changedReps, 15);
+    // Verify the callback was triggered with the correct reps
+    expect(newReps, 10);
   });
 }

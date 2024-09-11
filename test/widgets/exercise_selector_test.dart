@@ -5,39 +5,39 @@ import 'package:workout_tracker/core/constants.dart';
 
 void main() {
   testWidgets('ExerciseSelector displays exercises and triggers callback', (WidgetTester tester) async {
-    // Arrange
     String selectedExercise = 'Squat';
-    String? changedExercise;
+    String? newExercise;
 
-    // Act
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
           body: ExerciseSelector(
             selectedExercise: selectedExercise,
             onExerciseChanged: (exercise) {
-              changedExercise = exercise;
+              newExercise = exercise;
             },
           ),
         ),
       ),
     );
 
-    // Verify DropdownButton is shown with correct items
-    expect(find.byType(DropdownButton<String>), findsOneWidget);
+    // Verify the dropdown contains the initial selected exercise
     expect(find.text('Squat'), findsOneWidget);
-    expect(find.text('Bench Press'), findsOneWidget);
-    expect(find.text('Deadlift'), findsOneWidget);
-    expect(find.text('Overhead Press'), findsOneWidget);
 
-    // Tap the dropdown and select a new value
+    // Open the dropdown
     await tester.tap(find.byType(DropdownButton<String>));
     await tester.pumpAndSettle();
 
+    // Verify dropdown items
+    for (String exercise in exercises) {
+      expect(find.text(exercise), findsOneWidget);
+    }
+
+    // Select new exercise
     await tester.tap(find.text('Bench Press').last);
     await tester.pumpAndSettle();
 
-    // Verify callback is triggered with the new value
-    expect(changedExercise, 'Bench Press');
+    // Verify the callback was triggered with the correct exercise
+    expect(newExercise, 'Bench Press');
   });
 }
