@@ -1,6 +1,6 @@
-Project README
+Project Workout tracker
 
-Project README
+Project  Workout tracker
 ==============
 
 Overview
