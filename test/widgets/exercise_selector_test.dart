@@ -1,30 +1,43 @@
-
-import package:flutter/material.dart;
-import package:flutter_test/flutter_test.dart;
-import ../lib/widgets/exercise_selector.dart;
-import ../lib/core/constants.dart;
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:workout_tracker/widgets/exercise_selector.dart';
+import 'package:workout_tracker/core/constants.dart';
 
 void main() {
-  testWidgets(ExerciseSelector displays and changes selected exercise, (WidgetTester tester) async {
-    final selectedExercise = exercises[0];
+  testWidgets('ExerciseSelector displays exercises and triggers callback', (WidgetTester tester) async {
+    // Arrange
+    String selectedExercise = 'Squat';
+    String? changedExercise;
 
-    await tester.pumpWidget(MaterialApp(
-      home: Scaffold(
-        body: ExerciseSelector(
-          selectedExercise: selectedExercise,
-          onExerciseChanged: (value) {},
+    // Act
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: ExerciseSelector(
+            selectedExercise: selectedExercise,
+            onExerciseChanged: (exercise) {
+              changedExercise = exercise;
+            },
+          ),
         ),
       ),
-    ));
+    );
 
-    expect(find.text(Select Exercise), findsOneWidget);
-    expect(find.text(selectedExercise), findsOneWidget);
+    // Verify DropdownButton is shown with correct items
+    expect(find.byType(DropdownButton<String>), findsOneWidget);
+    expect(find.text('Squat'), findsOneWidget);
+    expect(find.text('Bench Press'), findsOneWidget);
+    expect(find.text('Deadlift'), findsOneWidget);
+    expect(find.text('Overhead Press'), findsOneWidget);
 
-    // Test the dropdown change
+    // Tap the dropdown and select a new value
     await tester.tap(find.byType(DropdownButton<String>));
     await tester.pumpAndSettle();
-    await tester.tap(find.text(exercises[1]).last);
+
+    await tester.tap(find.text('Bench Press').last);
     await tester.pumpAndSettle();
+
+    // Verify callback is triggered with the new value
+    expect(changedExercise, 'Bench Press');
   });
 }
-

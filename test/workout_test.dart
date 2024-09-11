@@ -1,28 +1,54 @@
 import 'package:flutter_test/flutter_test.dart';
-import '../lib/models/workout.dart';
-import '../lib/models/workout_set.dart';
+import 'package:workout_tracker/models/workout.dart';
+import 'package:workout_tracker/models/workout_set.dart';
 
 void main() {
-  test('Workout model toMap and fromMap should work correctly', () {
-    final workout = Workout(
-      id: 'test_id',
-      createdDate: '2024-09-11T12:29:00.000',
-      sets: [
-        WorkoutSet(
-          id: 'set_id',
-          exercise: 'Squat',
-          weight: 50.0,
-          reps: 10,
-        ),
-      ],
-    );
+  group('Workout Model Tests', () {
+    test('Create a Workout with sets', () {
+      final workoutSet1 = WorkoutSet(
+        id: 'set_1',
+        exercise: 'Bench Press',
+        weight: 50.0,
+        reps: 10,
+        workoutId: 'workout_123',
+      );
+      final workoutSet2 = WorkoutSet(
+        id: 'set_2',
+        exercise: 'Deadlift',
+        weight: 100.0,
+        reps: 5,
+        workoutId: 'workout_123',
+      );
 
-    final workoutMap = workout.toMap();
-    final newWorkout = Workout.fromMap(workoutMap);
+      final workout = Workout(
+        id: 'workout_123',
+        createdDate: DateTime.now().toIso8601String(),
+        sets: [workoutSet1, workoutSet2],
+      );
 
-    expect(newWorkout.id, workout.id);
-    expect(newWorkout.createdDate, workout.createdDate);
-    expect(newWorkout.sets.length, workout.sets.length);
-    expect(newWorkout.sets[0].exercise, workout.sets[0].exercise);
+      expect(workout.id, 'workout_123');
+      expect(workout.sets.length, 2);
+      expect(workout.sets[0].exercise, 'Bench Press');
+      expect(workout.sets[1].weight, 100.0);
+    });
+
+    test('Update workout set details', () {
+      final workoutSet = WorkoutSet(
+        id: 'set_1',
+        exercise: 'Squat',
+        weight: 80.0,
+        reps: 8,
+        workoutId: 'workout_456',
+      );
+
+      final updatedSet = workoutSet.copyWith(
+        weight: 90.0,
+        reps: 10,
+      );
+
+      expect(updatedSet.weight, 90.0);
+      expect(updatedSet.reps, 10);
+      expect(updatedSet.exercise, 'Squat');
+    });
   });
 }

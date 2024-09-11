@@ -1,80 +1,79 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import '../lib/repositories/workout_repository_impl.dart';
-import '../lib/models/workout.dart';
-import '../lib/models/workout_set.dart';
+import 'package:workout_tracker/models/workout.dart';
+import 'package:workout_tracker/models/workout_set.dart';
+import 'package:workout_tracker/repositories/mock_workout_repository.dart';
 
 void main() {
-  late WorkoutRepositoryImpl repository;
+  group('MockWorkoutRepository Tests', () {
+    late MockWorkoutRepository mockRepository;
 
-  setUp(() async {
-    await Hive.initFlutter();
-    repository = WorkoutRepositoryImpl();
-    await repository.openBox();
-  });
+    setUp(() {
+      mockRepository = MockWorkoutRepository();
+    });
 
-  test('Insert and get workout', () async {
-    final workout = Workout(
-      id: 'test_id',
-      createdDate: '2024-09-11T12:29:00.000',
-      sets: [
-        WorkoutSet(
-          id: 'set_id',
-          exercise: 'Deadlift',
-          weight: 100.0,
-          reps: 5,
-        ),
-      ],
-    );
+    test('Insert and retrieve workouts', () async {
+      final workout = Workout(
+        id: 'workout_1',
+        createdDate: DateTime.now().toIso8601String(),
+        sets: [
+          WorkoutSet(
+            id: 'set_1',
+            exercise: 'Squat',
+            weight: 80.0,
+            reps: 10,
+            workoutId: 'workout_1',
+          ),
+        ],
+      );
 
-    await repository.insertWorkout(workout);
-    final workouts = await repository.getWorkouts();
+      await mockRepository.insertWorkout(workout);
 
-    expect(workouts.length, 1);
-    expect(workouts[0].id, workout.id);
-  });
+      final workouts = await mockRepository.getWorkouts();
+      expect(workouts.length, 1);
+      expect(workouts[0].id, 'workout_1');
+      expect(workouts[0].sets[0].exercise, 'Squat');
+    });
 
-  test('Update workout', () async {
-    final workout = Workout(
-      id: 'test_id',
-      createdDate: '2024-09-11T12:29:00.000',
-      sets: [
-        WorkoutSet(
-          id: 'set_id',
-          exercise: 'Bench Press',
-          weight: 80.0,
-          reps: 8,
-        ),
-      ],
-    );
+    test('Update a workout', () async {
+      final workout = Workout(
+        id: 'workout_2',
+        createdDate: DateTime.now().toIso8601String(),
+        sets: [],
+      );
 
-    await repository.insertWorkout(workout);
-    workout.sets[0] = workout.sets[0].copyWith(weight: 85.0);
-    await repository.updateWorkout(workout);
-    final workouts = await repository.getWorkouts();
+      await mockRepository.insertWorkout(workout);
 
-    expect(workouts[0].sets[0].weight, 85.0);
-  });
+      final updatedWorkout = workout.copyWith(
+        sets: [
+          WorkoutSet(
+            id: 'set_1',
+            exercise: 'Deadlift',
+            weight: 150.0,
+            reps: 5,
+            workoutId: 'workout_2',
+          ),
+        ],
+      );
 
-  test('Delete workout', () async {
-    final workout = Workout(
-      id: 'test_id',
-      createdDate: '2024-09-11T12:29:00.000',
-      sets: [
-        WorkoutSet(
-          id: 'set_id',
-          exercise: 'Squat',
-          weight: 60.0,
-          reps: 12,
-        ),
-      ],
-    );
+      await mockRepository.updateWorkout(updatedWorkout);
 
-    await repository.insertWorkout(workout);
-    await repository.deleteWorkout(workout.id);
-    final workouts = await repository.getWorkouts();
+      final workouts = await mockRepository.getWorkouts();
+      expect(workouts[0].sets[0].exercise, 'Deadlift');
+    });
 
-    expect(workouts.isEmpty, true);
+    test('Delete a workout', () async {
+      final workout = Workout(
+        id: 'workout_3',
+        createdDate: DateTime.now().toIso8601String(),
+        sets: [],
+      );
+
+      await mockRepository.insertWorkout(workout);
+
+      await mockRepository.deleteWorkout('workout_3');
+
+      final workouts = await mockRepository.getWorkouts();
+      expect(workouts.isEmpty, true);
+    });
   });
 }

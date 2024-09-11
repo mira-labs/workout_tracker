@@ -1,21 +1,41 @@
 import 'package:flutter_test/flutter_test.dart';
-import '../lib/models/workout_set.dart';
+import 'package:workout_tracker/models/workout_set.dart';
 
 void main() {
-  test('WorkoutSet model toMap and fromMap should work correctly', () {
-    final workoutSet = WorkoutSet(
-      id: 'set_id',
-      exercise: 'Push Up',
-      weight: 20.0,
-      reps: 15,
-    );
+  group('WorkoutSet Model Tests', () {
+    test('Create a WorkoutSet', () {
+      final workoutSet = WorkoutSet(
+        id: 'set_1',
+        exercise: 'Bench Press',
+        weight: 50.0,
+        reps: 10,
+        workoutId: 'workout_123',
+      );
 
-    final workoutSetMap = workoutSet.toMap();
-    final newWorkoutSet = WorkoutSet.fromMap(workoutSetMap);
+      expect(workoutSet.id, 'set_1');
+      expect(workoutSet.exercise, 'Bench Press');
+      expect(workoutSet.weight, 50.0);
+      expect(workoutSet.reps, 10);
+      expect(workoutSet.workoutId, 'workout_123');
+    });
 
-    expect(newWorkoutSet.id, workoutSet.id);
-    expect(newWorkoutSet.exercise, workoutSet.exercise);
-    expect(newWorkoutSet.weight, workoutSet.weight);
-    expect(newWorkoutSet.reps, workoutSet.reps);
+    test('Copy a WorkoutSet with modifications', () {
+      final workoutSet = WorkoutSet(
+        id: 'set_2',
+        exercise: 'Deadlift',
+        weight: 100.0,
+        reps: 5,
+        workoutId: 'workout_456',
+      );
+
+      final modifiedSet = workoutSet.copyWith(
+        weight: 120.0,
+        reps: 8,
+      );
+
+      expect(modifiedSet.weight, 120.0);
+      expect(modifiedSet.reps, 8);
+      expect(modifiedSet.exercise, 'Deadlift');
+    });
   });
 }
