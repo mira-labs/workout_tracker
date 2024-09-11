@@ -1,57 +1,53 @@
-// lib/models/workout.dart
+import 'package:hive/hive.dart';
+import 'workout_set.dart'; // Import WorkoutSet class
 
-import 'package:equatable/equatable.dart';
+part 'workout.g.dart'; // Generated file for the adapter
 
-class Workout extends Equatable {
+@HiveType(typeId: 0) // Unique typeId for the Workout model
+class Workout extends HiveObject {
+  @HiveField(0)
   final String id;
+
+  @HiveField(1)
+  final String createdDate;
+
+  @HiveField(2)
   final List<WorkoutSet> sets;
-  final DateTime createdDate;  // New property
 
   Workout({
     required this.id,
+    required this.createdDate,
     required this.sets,
-    required this.createdDate,  // Include the new property in the constructor
   });
 
-  @override
-  List<Object?> get props => [id, sets, createdDate];  // Include in props
-
+  // CopyWith method for immutability
   Workout copyWith({
     String? id,
+    String? createdDate,
     List<WorkoutSet>? sets,
-    DateTime? createdDate,  // Include in copyWith
   }) {
     return Workout(
       id: id ?? this.id,
-      sets: sets ?? this.sets,
       createdDate: createdDate ?? this.createdDate,
+      sets: sets ?? this.sets,
     );
   }
-}
 
-class WorkoutSet extends Equatable {
-  final String exercise;
-  final double weight;
-  final int reps;
+  // Convert Workout to Map
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'createdDate': createdDate,
+      'sets': sets.map((set) => set.toMap()).toList(),
+    };
+  }
 
-  WorkoutSet({
-    required this.exercise,
-    required this.weight,
-    required this.reps,
-  });
-
-  @override
-  List<Object?> get props => [exercise, weight, reps];
-
-  WorkoutSet copyWith({
-    String? exercise,
-    double? weight,
-    int? reps,
-  }) {
-    return WorkoutSet(
-      exercise: exercise ?? this.exercise,
-      weight: weight ?? this.weight,
-      reps: reps ?? this.reps,
+  // Create Workout from Map
+  factory Workout.fromMap(Map<String, dynamic> map) {
+    return Workout(
+      id: map['id'],
+      createdDate: map['createdDate'],
+      sets: (map['sets'] as List).map((setMap) => WorkoutSet.fromMap(setMap)).toList(),
     );
   }
 }

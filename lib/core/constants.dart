@@ -1,5 +1,6 @@
 // lib/core/constants.dart
 
+// Exercises
 const List<String> exercises = [
   'Squat',
   'Bench Press',
@@ -7,17 +8,12 @@ const List<String> exercises = [
   'Overhead Press',
 ];
 
-const List<int> repsList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+// Repetitions from 1 to 20
+List<int> repetitions = [
+  for (int i = 1; i <= 20; i++) i
+];
 
-const List<double> weights = [
-  5.0,
-  10.0,
-  15.0,
-  20.0,
-  25.0,
-  30.0,
-  35.0,
-  40.0,
-  45.0,
-  50.0,
+// Weights from 0.5 kg to 120.0 kg (in 0.5 kg increments)
+List<double> weights = [
+  for (double w = 0.5; w <= 120.0; w += 0.5) w
 ];

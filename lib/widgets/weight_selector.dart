@@ -13,16 +13,16 @@ class WeightSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButton<double>(
-      value: selectedWeight,
+      value: weights.contains(selectedWeight) ? selectedWeight : null, // Ensure valid value
       items: weights.map((double weight) {
         return DropdownMenuItem<double>(
           value: weight,
-          child: Text('$weight kg'),
+          child: Text('${weight.toStringAsFixed(1)} kg'), // Format weight to one decimal place
         );
       }).toList(),
       onChanged: onWeightChanged,
       hint: Text('Select Weight'),
-      isExpanded: true,
+      isExpanded: true, // Expands the dropdown to the full width
     );
   }
 }

@@ -2,40 +2,33 @@ import 'package:flutter/material.dart';
 import '../models/workout.dart';
 import '../repositories/workout_repository.dart';
 
-class WorkoutProvider with ChangeNotifier {
-  final WorkoutRepository _repository;
-
+class WorkoutProvider extends ChangeNotifier {
+  final WorkoutRepository repository;
   List<Workout> _workouts = [];
 
-  WorkoutProvider(this._repository) {
+  WorkoutProvider({required this.repository}) {
     _loadWorkouts();
   }
 
   List<Workout> get workouts => _workouts;
 
   Future<void> _loadWorkouts() async {
-    _workouts = await _repository.getWorkouts();
+    _workouts = await repository.getWorkouts();
     notifyListeners();
   }
 
   Future<void> addWorkout(Workout workout) async {
-    await _repository.addWorkout(workout);
-    _workouts.add(workout);
-    notifyListeners();
+    await repository.insertWorkout(workout);
+    _loadWorkouts();
   }
 
-  Future<void> updateWorkout(Workout updatedWorkout) async {
-    await _repository.updateWorkout(updatedWorkout);
-    final index = _workouts.indexWhere((w) => w.id == updatedWorkout.id);
-    if (index != -1) {
-      _workouts[index] = updatedWorkout;
-      notifyListeners();
-    }
+  Future<void> updateWorkout(Workout workout) async {
+    await repository.updateWorkout(workout);
+    _loadWorkouts();
   }
 
-  Future<void> deleteWorkout(String workoutId) async {
-    await _repository.deleteWorkout(workoutId);
-    _workouts.removeWhere((w) => w.id == workoutId);
-    notifyListeners();
+  Future<void> deleteWorkout(String id) async {
+    await repository.deleteWorkout(id);
+    _loadWorkouts();
   }
 }

@@ -13,7 +13,7 @@ class ExerciseSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(
-      value: selectedExercise,
+      value: exercises.contains(selectedExercise) ? selectedExercise : null, // Ensure valid value
       items: exercises.map((String exercise) {
         return DropdownMenuItem<String>(
           value: exercise,
@@ -22,7 +22,7 @@ class ExerciseSelector extends StatelessWidget {
       }).toList(),
       onChanged: onExerciseChanged,
       hint: Text('Select Exercise'),
-      isExpanded: true,
+      isExpanded: true, // Ensures the dropdown expands to fit the width
     );
   }
 }
