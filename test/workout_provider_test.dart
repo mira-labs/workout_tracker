@@ -42,6 +42,7 @@ void main() {
     });
 
     test('WorkoutProvider updates an existing workout', () async {
+
       final workout = Workout(
         id: 'workout_3',
         createdDate: DateTime.now().toIso8601String(),
