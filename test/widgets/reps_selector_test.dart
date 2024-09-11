@@ -21,23 +21,18 @@ void main() {
       ),
     );
 
-    // Verify the dropdown contains the initial selected reps
     expect(find.text('5 reps'), findsOneWidget);
 
-    // Open the dropdown
     await tester.tap(find.byType(DropdownButton<int>));
     await tester.pumpAndSettle();
 
-    // Verify dropdown items
     for (int reps in repetitions) {
       expect(find.text('$reps reps'), findsOneWidget);
     }
 
-    // Select new reps
     await tester.tap(find.text('10 reps').last);
     await tester.pumpAndSettle();
 
-    // Verify the callback was triggered with the correct reps
     expect(newReps, 10);
   });
 }

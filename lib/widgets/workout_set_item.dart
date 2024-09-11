@@ -8,9 +8,9 @@ import 'exercise_selector.dart';
 
 class WorkoutSetItem extends StatelessWidget {
   final WorkoutSet workoutSet;
-  final ValueChanged<String>? onExerciseChanged; // Changed to non-nullable String
-  final ValueChanged<double>? onWeightChanged; // Changed to non-nullable double
-  final ValueChanged<int>? onRepsChanged; // Changed to non-nullable int
+  final ValueChanged<String>? onExerciseChanged;
+  final ValueChanged<double>? onWeightChanged;
+  final ValueChanged<int>? onRepsChanged;
   final VoidCallback? onRemove;
 
   WorkoutSetItem({

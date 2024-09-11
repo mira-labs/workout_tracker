@@ -21,23 +21,18 @@ void main() {
       ),
     );
 
-    // Verify the dropdown contains the initial selected exercise
     expect(find.text('Squat'), findsOneWidget);
 
-    // Open the dropdown
     await tester.tap(find.byType(DropdownButton<String>));
     await tester.pumpAndSettle();
 
-    // Verify dropdown items
     for (String exercise in exercises) {
       expect(find.text(exercise), findsOneWidget);
     }
 
-    // Select new exercise
     await tester.tap(find.text('Bench Press').last);
     await tester.pumpAndSettle();
 
-    // Verify the callback was triggered with the correct exercise
     expect(newExercise, 'Bench Press');
   });
 }

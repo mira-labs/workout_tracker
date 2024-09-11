@@ -1,9 +1,8 @@
 import 'package:hive/hive.dart';
-import 'workout_set.dart'; // Import WorkoutSet class
+import 'workout_set.dart';
+part 'workout.g.dart';
 
-part 'workout.g.dart'; // Generated file for the adapter
-
-@HiveType(typeId: 0) // Unique typeId for the Workout model
+@HiveType(typeId: 0)
 class Workout extends HiveObject {
   @HiveField(0)
   final String id;

@@ -13,16 +13,16 @@ class RepsSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButton<int>(
-      value: repetitions.contains(selectedReps) ? selectedReps : null, // Ensure valid value
+      value: repetitions.contains(selectedReps) ? selectedReps : null,
       items: repetitions.map((int reps) {
         return DropdownMenuItem<int>(
           value: reps,
           child: Text('$reps reps'),
         );
       }).toList(),
-      onChanged: onRepsChanged, // Callback when the value changes
+      onChanged: onRepsChanged,
       hint: Text('Select Reps'),
-      isExpanded: true, // Expands to fit width
+      isExpanded: true,
     );
   }
 }

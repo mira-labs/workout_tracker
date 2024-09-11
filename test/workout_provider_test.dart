@@ -15,7 +15,6 @@ void main() {
     });
 
     test('WorkoutProvider loads workouts from repository', () async {
-      // Arrange: Create a mock workout and insert it into the repository
       final workout = Workout(
         id: 'workout_1',
         createdDate: DateTime.now().toIso8601String(),
@@ -23,32 +22,26 @@ void main() {
       );
       await mockRepository.insertWorkout(workout);
 
-      // Act: The WorkoutProvider should automatically load the workouts via _loadWorkouts()
       await Future.delayed(Duration(milliseconds: 100));  // Give time for async loading
 
-      // Assert: Ensure the provider has the workout loaded
       expect(workoutProvider.workouts.length, 1);
       expect(workoutProvider.workouts[0].id, 'workout_1');
     });
 
     test('WorkoutProvider adds a new workout', () async {
-      // Arrange: Create a new workout
       final workout = Workout(
         id: 'workout_2',
         createdDate: DateTime.now().toIso8601String(),
         sets: [],
       );
 
-      // Act: Add the workout via the provider
       await workoutProvider.addWorkout(workout);
 
-      // Assert: Ensure the workout was added
       expect(workoutProvider.workouts.length, 1);
       expect(workoutProvider.workouts[0].id, 'workout_2');
     });
 
     test('WorkoutProvider updates an existing workout', () async {
-      // Arrange: Add a workout to the provider
       final workout = Workout(
         id: 'workout_3',
         createdDate: DateTime.now().toIso8601String(),
@@ -56,7 +49,6 @@ void main() {
       );
       await workoutProvider.addWorkout(workout);
 
-      // Act: Update the workout
       final updatedWorkout = workout.copyWith(
         sets: [
           WorkoutSet(
@@ -70,13 +62,11 @@ void main() {
       );
       await workoutProvider.updateWorkout(updatedWorkout);
 
-      // Assert: Ensure the workout was updated
       expect(workoutProvider.workouts[0].sets.length, 1);
       expect(workoutProvider.workouts[0].sets[0].exercise, 'Deadlift');
     });
 
     test('WorkoutProvider deletes a workout', () async {
-      // Arrange: Add a workout to the provider
       final workout = Workout(
         id: 'workout_4',
         createdDate: DateTime.now().toIso8601String(),
@@ -84,10 +74,8 @@ void main() {
       );
       await workoutProvider.addWorkout(workout);
 
-      // Act: Delete the workout
       await workoutProvider.deleteWorkout('workout_4');
 
-      // Assert: Ensure the workout was deleted
       expect(workoutProvider.workouts.isEmpty, true);
     });
   });

@@ -19,14 +19,11 @@ void main() {
       ),
     );
 
-    // Verify workout description is displayed
     expect(find.text('Workout 1: Bench Press - 3 sets'), findsOneWidget);
 
-    // Trigger edit
     await tester.tap(find.byIcon(Icons.edit));
     expect(editCalled, true);
 
-    // Trigger delete
     await tester.tap(find.byIcon(Icons.delete));
     expect(deleteCalled, true);
   });
