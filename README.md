@@ -1,5 +1,5 @@
 Project Workout tracker
-![App animation](https://github.com/mira-labs/workout_tracker/blob/main/iphone.gif)
+
 Project  Workout tracker
 ==============
 
@@ -59,3 +59,5 @@ Setup Instructions
     To ensure everything is working correctly, run the tests:
 
         flutter test
+
+![App animation](https://github.com/mira-labs/workout_tracker/blob/main/iphone.gif)
