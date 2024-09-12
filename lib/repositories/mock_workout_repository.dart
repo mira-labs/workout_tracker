@@ -1,41 +1,50 @@
-import 'package:flutter/material.dart';
+import 'dart:async';
 import '../models/workout.dart';
 import '../models/workout_set.dart';
 import 'workout_repository.dart';
 
 class MockWorkoutRepository implements WorkoutRepository {
-  final List<Workout> _workouts = [];
+  final Map<String, Workout> _workouts = {};
+  final Map<String, WorkoutSet> _sets = {};
 
   @override
   Future<void> insertWorkout(Workout workout) async {
-    _workouts.add(workout);
+    // Simulate a network delay
+    await Future.delayed(Duration(milliseconds: 500));
+    _workouts[workout.id] = workout;
+
+    // Also save the sets separately
+    for (var set in workout.sets) {
+      _sets[set.id] = set;
+    }
   }
 
   @override
   Future<List<Workout>> getWorkouts() async {
-    return _workouts;
+    // Simulate a network delay
+    await Future.delayed(Duration(milliseconds: 500));
+    return _workouts.values.toList();
   }
 
   @override
   Future<void> updateWorkout(Workout workout) async {
-    final index = _workouts.indexWhere((w) => w.id == workout.id);
-    if (index != -1) {
-      _workouts[index] = workout;
+    // Simulate a network delay
+    await Future.delayed(Duration(milliseconds: 500));
+    _workouts[workout.id] = workout;
+
+    // Also update the sets
+    for (var set in workout.sets) {
+      _sets[set.id] = set;
     }
   }
 
   @override
   Future<void> deleteWorkout(String id) async {
-    _workouts.removeWhere((workout) => workout.id == id);
-  }
+    // Simulate a network delay
+    await Future.delayed(Duration(milliseconds: 500));
+    _workouts.remove(id);
 
-  @override
-  Future<void> openBox() async {
-    // No-op for the mock repository, as there is no actual box to open
-  }
-
-  @override
-  Future<void> closeBox() async {
-    // No-op for the mock repository, as there is no actual box to close
+    // Remove associated sets
+    _sets.removeWhere((key, value) => value.workoutId == id);
   }
 }

@@ -1,8 +1,9 @@
 import 'package:hive/hive.dart';
-import 'workout_set.dart';
-part 'workout.g.dart';
+import 'workout_set.dart'; // Import WorkoutSet class
 
-@HiveType(typeId: 0)
+part 'workout.g.dart'; // Generated file for the adapter
+
+@HiveType(typeId: 0) // Unique typeId for the Workout model
 class Workout extends HiveObject {
   @HiveField(0)
   final String id;
@@ -19,7 +20,7 @@ class Workout extends HiveObject {
     required this.sets,
   });
 
-  // CopyWith method for immutability
+  // CopyWith method for immutability (optional)
   Workout copyWith({
     String? id,
     String? createdDate,
@@ -32,7 +33,7 @@ class Workout extends HiveObject {
     );
   }
 
-  // Convert Workout to Map
+  // Convert Workout to Map (optional)
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -41,7 +42,7 @@ class Workout extends HiveObject {
     };
   }
 
-  // Create Workout from Map
+  // Create Workout from Map (optional)
   factory Workout.fromMap(Map<String, dynamic> map) {
     return Workout(
       id: map['id'],

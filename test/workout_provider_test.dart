@@ -11,7 +11,7 @@ void main() {
 
     setUp(() {
       mockRepository = MockWorkoutRepository();
-      workoutProvider = WorkoutProvider(repository: mockRepository);
+      workoutProvider = WorkoutProvider();
     });
 
     test('WorkoutProvider loads workouts from repository', () async {
@@ -22,8 +22,11 @@ void main() {
       );
       await mockRepository.insertWorkout(workout);
 
-      await Future.delayed(Duration(milliseconds: 100));  // Give time for async loading
+      // Since the provider loads workouts in its constructor,
+      // we need to wait until it finishes loading.
+      await Future.delayed(Duration(milliseconds: 100));
 
+      // Access the workouts from the provider
       expect(workoutProvider.workouts.length, 1);
       expect(workoutProvider.workouts[0].id, 'workout_1');
     });
@@ -37,12 +40,12 @@ void main() {
 
       await workoutProvider.addWorkout(workout);
 
+      // Access the workouts from the provider
       expect(workoutProvider.workouts.length, 1);
       expect(workoutProvider.workouts[0].id, 'workout_2');
     });
 
     test('WorkoutProvider updates an existing workout', () async {
-
       final workout = Workout(
         id: 'workout_3',
         createdDate: DateTime.now().toIso8601String(),
@@ -63,6 +66,7 @@ void main() {
       );
       await workoutProvider.updateWorkout(updatedWorkout);
 
+      // Access the workouts from the provider
       expect(workoutProvider.workouts[0].sets.length, 1);
       expect(workoutProvider.workouts[0].sets[0].exercise, 'Deadlift');
     });
@@ -77,6 +81,7 @@ void main() {
 
       await workoutProvider.deleteWorkout('workout_4');
 
+      // Access the workouts from the provider
       expect(workoutProvider.workouts.isEmpty, true);
     });
   });
